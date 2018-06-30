@@ -37,7 +37,7 @@ int cr = 8;
 String uploadurl="http://83.212.126.194:50000/logstashmetricinput";
 //const char *filename = "/tmp/iotdatajson.json";
 uint8_t datasize;
-int loraSetup=1a;
+int loraSetup=1;
 
 Process process;
 
@@ -55,7 +55,8 @@ struct message{
   float umidity;
   float temp;
   int lorasetup;
-}data;
+  int txpower;
+}data, datarcv;
  
 //byte* dataPtr = (byte*)&data;
 struct message *dataPtr;
@@ -189,6 +190,7 @@ void printData(){
   Console.print("Experiment ID: ");  Console.println(data.experimentid);
   Console.print("LORA SETUP: ");  Console.println(data.lorasetup); 
   Console.print("DATA SIZE ");  Console.println(String(datasize));
+  Console.print("TX POWER ");  Console.println(String(data.txpower));
   Console.println();
  
 }
