@@ -42,8 +42,8 @@ def insert_metric():
                        'temperature':temperature,'umidity':umidity,'node-location':nodelocation,\
                        'time':timestamp,'delay':delay,'lorasetup':lorasetup,'packetsize':packetsize,'experimentid':expid,'gw-location':gwlocation}
             logger.info(payload);
-           # res = requests.post(url,data=json.dumps(payload),headers=head)
-           # logger.error(res)
+           #res = requests.post(url,data=json.dumps(payload),headers=head)
+           #logger.error(res)
             with open(filename, "aw") as fo:
                  fo.write(timestamp+","+idnode+","+sequencenum +","+snr+","+rssi+","+temperature+",\
                         "+umidity+","+nodelocation+","+delay+","+lorasetup+","+packetsize+","+expid+","+gwlocation+"\n")
