@@ -6,10 +6,12 @@ import csv
 import os.path
 import json
 import requests
-
+import time
 
 application = Flask(__name__)
 #auth = HTTPBasicAuth()
+logpath = "/Users/Luix/PycharmProjects/iotelasticproject/"
+
 
 @application.route('/logstashmetricinput', methods=['POST'])
 def insert_metric():
@@ -17,7 +19,9 @@ def insert_metric():
 
             url = 'http://127.0.0.1:31311/'
             head = {'Content-type': 'application/json'}
-            filename = "/Users/Luix/PycharmProjects/iotelasticproject/inputmetric.cvs"
+            date = time.strftime("%Y-%m-%d")
+
+            filename = logpath+"inputmetric_"+date+".cvs"
             idnode = str(request.json['idnode'])
             sequencenum = str(request.json['sequencenum'])
             snr = str(request.json['snr'])
@@ -49,8 +53,8 @@ def insert_metric():
 
 def create_logger():
     global logger
-    logger = logging.getLogger('iotnetserverlogger')
-    hdlr = logging.FileHandler('/Users/Luix/PycharmProjects/iotelasticproject/iotnetserver.log')
+    logger = logging.getLogger(logpath+'iotnetserverlogger')
+    hdlr = logging.FileHandler('iotnetserver.log')
     formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
     hdlr.setFormatter(formatter)
     logger.addHandler(hdlr)
@@ -58,6 +62,5 @@ def create_logger():
 
 if __name__ == '__main__':
     create_logger()
-    application.run(debug=True,host='0.0.0.0')
-    #application.run(host='127.0.0.1')
+    application.run(debug=True,host='127.0.0.1')
         
