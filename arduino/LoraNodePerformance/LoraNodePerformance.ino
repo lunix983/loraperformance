@@ -24,7 +24,7 @@ int loraSetup = 1;
 int dht_dpin = 7;
 DHT dht(DHTPIN, DHTTYPE);
 long expid; 
-
+int txpower = 13;
 
 
 struct message{
@@ -41,6 +41,7 @@ struct message{
   float umidity;
   float temp;
   int lorasetup;
+  int txpower;
 }data, datarcv;
 
 byte tx_buf[sizeof(data)] = {0};
@@ -70,6 +71,7 @@ void setup()
   data.idnode = nodeID;
   data.experimentid = customRandom();  
   data.lorasetup = loraSetup;
+  data.txpower = txpower;
   
   
 } // end setup
@@ -104,6 +106,7 @@ void printData(){
   Serial.print("TEMP: ");  Serial.println(data.temp );
   Serial.print("UMIDITY: ");  Serial.println(data.umidity );
   Serial.print("LORA SETUP: ");  Serial.println(data.lorasetup);
+  Serial.print("TX POWER : ");  Serial.println(data.txpower);
   //Serial.print();  Serial.println();
  
 }
@@ -122,7 +125,7 @@ void setLoraSetup(){
   // Setup ISM frequency
   rf95.setFrequency(frequency);
   // Setup Power,dBm
-  rf95.setTxPower(13);
+  rf95.setTxPower(txpower);
         switch (loraSetup) {
           case 1:
             rf95.setSignalBandwidth(125000);
