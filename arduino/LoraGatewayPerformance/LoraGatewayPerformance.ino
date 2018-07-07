@@ -178,12 +178,11 @@ String createCommand(String parameter)
 }
 
 
-void printData(){
-  
+void printData(){  
   Console.print("MILLIS: ");  Console.println(data.time );
-  Console.print("SEQUENCE: ");  Console.println(data.sequencenum );
-  Console.print("LAT: ");  Console.println(data.lat,6);
-  Console.print("LON: ");  Console.println(data.lon,6);
+  Console.print("SEQUENCE: ");  Console.println(data.sequencenum ); 
+  Console.print("LAT: ");  Console.println(data.lat);
+  Console.print("LAT: ");  Console.println(data.lon);
   Console.print("RSSI: ");  Console.println(data.rssi);
   Console.print("SNR: ");  Console.println(data.snr);  
   Console.print("DELAY: ");  Console.println(data.delay);
@@ -191,14 +190,13 @@ void printData(){
   Console.print("LORA SETUP: ");  Console.println(data.lorasetup); 
   Console.print("DATA SIZE ");  Console.println(String(datasize));
   Console.print("TX POWER ");  Console.println(String(data.txpower));
-  Console.println();
- 
+  Console.println(); 
 }
 
 
 void uploaddata()
 { 
-
+    int res;
     process.runShellCommand("if [ -f /tmp/iotdata.txt ]; then rm -f /tmp/iotdata.txt; fi");
     
     process.runShellCommand(createCommand(String(data.idnode)));
@@ -213,10 +211,12 @@ void uploaddata()
     process.runShellCommand(createCommand(String(data.lorasetup)));
     process.runShellCommand(createCommand(String(datasize)));
     process.runShellCommand(createCommand(String(data.experimentid)));
+    process.runShellCommand(createCommand(String(data.txpower)));
     
-    int res = process.runShellCommand("uploaddatajson.sh");
+    res = process.runShellCommand("uploaddatajson.sh");
+    Console.print("EXIT CODE: ");  Console.println(res);
     process.close();   
-    Console.print("EXIT CODE : ");  Console.println(res);
+    
       
 }
 
