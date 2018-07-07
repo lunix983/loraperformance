@@ -111,6 +111,8 @@ void printData(){
  
 }
 
+
+
 unsigned long customRandom(){
   int i;
   unsigned long uuid  = TrueRandom.random(1000);
@@ -172,7 +174,7 @@ void loop()
   data.temp = dht.readTemperature(); // Read temperature as Celsius (the default)
   //data.idnode = nodeID;
   data.sequencenum = count;
-  data.lat = flat;
+  data.lat = (flat,6);
   data.lon = flon;
   data.time = millis();
   data.rssi = rf95.lastRssi();
