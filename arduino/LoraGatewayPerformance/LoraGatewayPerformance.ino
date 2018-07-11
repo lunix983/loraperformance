@@ -122,46 +122,27 @@ void loop()
     if (rf95.waitAvailableTimeout(2000))
    // if (rf95.available())// Listen Data from LoRa Node
     {
-        
         uint8_t rx_buf[RH_RF95_MAX_MESSAGE_LEN];//receive data buffer
-        uint8_t len = sizeof(rx_buf);//data buffer length
-        
-        
-        
+        uint8_t len = sizeof(rx_buf);//data buffer length      
         if (rf95.recv(rx_buf, &len))//Check if there is incoming data
         {
-           // recdata( buf, len);
-           
-            Console.print("Received LoRa Packet from nodeID: "); Console.println(data.idnode);
-            
+          
+            Console.print("Received LoRa Packet from nodeID: "); Console.println(data.idnode);           
             Console.print("data buffer length ");  Console.println(len);
-            
             Console.print("data sizeof ");  Console.println(sizeof(data));  
-   
             datasize = len;
-           
-                     
             memcpy(&data, rx_buf, sizeof(data));
             data.status = 1;     
             memcpy(tx_buf, &data, sizeof(data) );
-            rf95.send((uint8_t *)tx_buf, sizeof(data));
-            
+            rf95.send((uint8_t *)tx_buf, sizeof(data));           
             printData();
-            uploaddata();
-                          
+            uploaddata();                         
          }
          else
          {
               Console.println("recv failed");
          }
-     }
-              
-}
-
-
-void test()
-{
-  Console.println("TEST");
+     }         
 }
 
 String createCommand(String parameter)

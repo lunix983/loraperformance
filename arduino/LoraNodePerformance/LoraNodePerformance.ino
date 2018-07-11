@@ -66,14 +66,11 @@ void setup()
   }
   setLoraSetup();
   Serial.print("LoRa End Node ID: "); Serial.println(nodeID);
-  
   Serial.print("Exp ID: "); Serial.println(expid);
   data.idnode = nodeID;
   data.experimentid = customRandom();  
   data.lorasetup = loraSetup;
-  data.txpower = txpower;
-  
-  
+  data.txpower = txpower; 
 } // end setup
 
 
@@ -160,21 +157,15 @@ void setLoraSetup(){
 void loop()
 { 
 
-  int j;
- 
-  
-  
   gps.f_get_position(&flat, &flon, &age);
   pinMode(dht_dpin,OUTPUT);//Set A0 to output
   digitalWrite(dht_dpin,HIGH);//Pull high A0
   
   smartdelay(500);
-  
   data.umidity = dht.readHumidity(); // Read temperature Humidity
   data.temp = dht.readTemperature(); // Read temperature as Celsius (the default)
-  //data.idnode = nodeID;
   data.sequencenum = count;
-  data.lat = (flat,6);
+  data.lat = flat;
   data.lon = flon;
   data.time = millis();
   data.rssi = rf95.lastRssi();
@@ -182,6 +173,48 @@ void loop()
   printData();
   memcpy(tx_buf, &data, sizeof(data) );
 
+Serial.print("FLAT: ");  Serial.println(flat);
+Serial.print("FLON: ");  Serial.println(flon);
+
+  if (flat != 1000.000000 && !flon != 1000.000000){
+        Serial.println("****** GPS READY");
+        Serial.print("DATA SIZE:"); Serial.println(sizeof(data)); 
+        rf95.send((uint8_t *)tx_buf, sizeof(data));
+        rf95.waitPacketSent();
+        // Now wait for a reply
+        uint8_t rx_buf[RH_RF95_MAX_MESSAGE_LEN];
+        uint8_t len = sizeof(rx_buf);
+        if (rf95.waitAvailableTimeout(3000))
+        {
+             if (rf95.recv(rx_buf, &len))
+             {
+                  memcpy(&datarcv, rx_buf, sizeof(datarcv)); 
+                  data.delay = (float)(millis() - datarcv.time) /2 ;
+                  if (datarcv.status == 1)
+                  {
+                        Serial.print("Message from gateway: ");  Serial.println(datarcv.status);
+                        Serial.print("SEQUENCE REPLAY: ");  Serial.println(datarcv.sequencenum );
+                        Serial.print("TIME REPLAY: ");  Serial.println(datarcv.time );
+                        Serial.print("DELAY REPLAY: ");  Serial.println(datarcv.delay );          
+                  }      
+            }
+            else
+            {
+                Serial.println("recv failed");
+            }
+           
+        } // end if waitAvailableTimeout
+        else
+        {
+              Serial.println("No reply, is LoraGateway running?");
+        }
+        count++;
+        delay(3000);   
+  }
+  else {
+    Serial.println(" ***** GPS NOT READY");  
+  }
+  /*
   Serial.print("DATA SIZE:"); Serial.println(sizeof(data)); 
   rf95.send((uint8_t *)tx_buf, sizeof(data));
 
@@ -195,17 +228,15 @@ void loop()
   {
       if (rf95.recv(rx_buf, &len))
       {
-        memcpy(&datarcv, rx_buf, sizeof(datarcv)); 
-        data.delay = (float)(millis() - datarcv.time) /2 ;
-        if (datarcv.status == 1){
-          Serial.print("Message from gateway: ");  Serial.println(datarcv.status);
-          Serial.print("SEQUENCE REPLAY: ");  Serial.println(datarcv.sequencenum );
-          Serial.print("TIME REPLAY: ");  Serial.println(datarcv.time );
-          Serial.print("DELAY REPLAY: ");  Serial.println(datarcv.delay );          
-        }
-         
-        
-      }
+            memcpy(&datarcv, rx_buf, sizeof(datarcv)); 
+            data.delay = (float)(millis() - datarcv.time) /2 ;
+            if (datarcv.status == 1){
+            Serial.print("Message from gateway: ");  Serial.println(datarcv.status);
+            Serial.print("SEQUENCE REPLAY: ");  Serial.println(datarcv.sequencenum );
+            Serial.print("TIME REPLAY: ");  Serial.println(datarcv.time );
+            Serial.print("DELAY REPLAY: ");  Serial.println(datarcv.delay );          
+       }        
+ }
       else
       {
          Serial.println("recv failed");
@@ -218,7 +249,7 @@ void loop()
   }
  
   count++;
-  delay(3000);
+  delay(3000);*/
   Serial.println("-------------------------------------");
 } // end loop
 
