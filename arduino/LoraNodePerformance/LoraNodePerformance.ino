@@ -16,7 +16,7 @@ int count = 0;
 float flat, flon;
 unsigned long age;
 SoftwareSerial ss(3, 4); 
-int loraSetup = 1;
+int loraSetup = 3;
 
 #define DHTPIN 7
 #define DHTTYPE DHT11
@@ -24,7 +24,7 @@ int loraSetup = 1;
 int dht_dpin = 7;
 DHT dht(DHTPIN, DHTTYPE);
 long expid; 
-int txpower = 13;
+int txpower = 17;
 
 
 struct message{
@@ -172,9 +172,6 @@ void loop()
   data.snr = rf95.lastSNR();
   printData();
   memcpy(tx_buf, &data, sizeof(data) );
-
-Serial.print("FLAT: ");  Serial.println(flat);
-Serial.print("FLON: ");  Serial.println(flon);
 
   if (flat != 1000.000000 && !flon != 1000.000000){
         Serial.println("****** GPS READY");
