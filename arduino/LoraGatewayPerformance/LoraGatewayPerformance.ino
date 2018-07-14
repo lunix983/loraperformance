@@ -37,7 +37,7 @@ int cr = 8;
 String uploadurl="http://83.212.126.194:50000/logstashmetricinput";
 //const char *filename = "/tmp/iotdatajson.json";
 uint8_t datasize;
-int loraSetup=1;
+int loraSetup=3;
 
 Process process;
 
@@ -83,7 +83,7 @@ void setLoraSetup(){
    // Setup ISM frequency
     rf95.setFrequency(frequency);
     // Setup Power,dBm
-    rf95.setTxPower(13);
+    rf95.setTxPower(17);
         switch (loraSetup) {
           case 1:
             rf95.setSignalBandwidth(125000);
