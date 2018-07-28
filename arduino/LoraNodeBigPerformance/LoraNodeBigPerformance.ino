@@ -16,7 +16,7 @@ int count = 1;
 float flat, flon;
 unsigned long age;
 SoftwareSerial ss(3, 4); 
-int loraSetup = 4;
+int loraSetup = 3;
 
 #define DHTPIN 7
 #define DHTTYPE DHT11
@@ -42,6 +42,7 @@ struct message{
   float temp;
   int lorasetup;
   int txpower;
+  int bigdata[21] = {0};
 }data, datarcv;
 
 byte tx_buf[sizeof(data)] = {0};
@@ -71,6 +72,7 @@ void setup()
   data.experimentid = customRandom();  
   data.lorasetup = loraSetup;
   data.txpower = txpower; 
+  
 } // end setup
 
 
@@ -104,6 +106,7 @@ void printData(){
   Serial.print("UMIDITY: ");  Serial.println(data.umidity );
   Serial.print("LORA SETUP: ");  Serial.println(data.lorasetup);
   Serial.print("TX POWER : ");  Serial.println(data.txpower);
+  Serial.print("DATA SIZE:"); Serial.println(sizeof(data)); 
   //Serial.print();  Serial.println();
  
 }
@@ -175,7 +178,7 @@ void loop()
 
   if (flat != 1000.000000 && !flon != 1000.000000){
         Serial.println("****** GPS READY");
-        Serial.print("DATA SIZE:"); Serial.println(sizeof(data)); 
+       
         rf95.send((uint8_t *)tx_buf, sizeof(data));
         rf95.waitPacketSent();
         // Now wait for a reply
