@@ -16,7 +16,7 @@ int count = 1;
 float flat, flon;
 unsigned long age;
 SoftwareSerial ss(3, 4); 
-int loraSetup = 4;
+int loraSetup = 3;
 
 #define DHTPIN 7
 #define DHTTYPE DHT11
@@ -24,7 +24,7 @@ int loraSetup = 4;
 int dht_dpin = 7;
 DHT dht(DHTPIN, DHTTYPE);
 long expid; 
-int txpower = 10;
+int txpower = 20;
 
 
 struct message{
