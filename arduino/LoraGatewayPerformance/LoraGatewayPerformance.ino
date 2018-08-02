@@ -83,7 +83,7 @@ void setLoraSetup(){
    // Setup ISM frequency
     rf95.setFrequency(frequency);
     // Setup Power,dBm
-    rf95.setTxPower(17);
+    rf95.setTxPower(20);
         switch (loraSetup) {
           case 1:
             rf95.setSignalBandwidth(125000);
